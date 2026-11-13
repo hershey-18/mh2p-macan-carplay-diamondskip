@@ -2,11 +2,11 @@
 
 On 2019–2021 Porsche Macans with PCM 5, the diamond button on the steering wheel can be set to *Next track*. That works for the radio, USB and Bluetooth audio, but does nothing in Apple CarPlay. If you listen to Spotify, Apple Music or podcasts through CarPlay, the button is dead. The usual answers are "buy a hardware module" or "buy a 2022+ car".
 
-DiamondSkip is a free software fix that you install from an SD card in about 15 minutes. Once it's installed, pressing the diamond button while CarPlay audio is playing skips to the next track, just like pressing next on your phone.
+DiamondSkip is a free software fix that you install from an SD card or USB stick in about 15 minutes. Once it's installed, pressing the diamond button while CarPlay audio is playing skips to the next track, just like pressing next on your phone.
 
 - **No hardware and no dealer visit.** It adds one small file to the PCM and changes nothing else.
-- **Fully reversible.** Uninstalling deletes that one file, and there's an emergency fail-safe card too.
-- **Everything is in one download.** It includes LawPaul's free [MH2p SD ModKit](https://github.com/LawPaul/MH2p_SD_ModKit), the tool that lets the PCM install mods from an SD card. You don't need to download it separately.
+- **Easy to remove.** Uninstalling deletes that one file, and there's an emergency fail-safe card too.
+- **Everything is in one download.** It includes LawPaul's free [MH2p SD ModKit](https://github.com/LawPaul/MH2p_SD_ModKit), the tool that lets the PCM install mods from an SD card. You don't need to download it separately. (If you've never used the ModKit before, see [Is it safe?](#is-it-safe) for the one other change it makes.)
 - **Free for personal use.** Licensed CC BY-NC-SA 4.0, no commercial use (see [license](#credits-and-license)).
 - **Works with other popular mods.** Tested alongside [LawPaul's full screen CarPlay mod](https://github.com/LawPaul/MH2p_CarPlay_FullScreen) and [fifthBro's cluster navigation mod](https://github.com/fifthBro/mh2p-cluster).
 
@@ -102,7 +102,7 @@ Skip this if you only have one card.
 
 1. Open **DiamondSkip_Install.zip** the same way.
 2. Open the folder it creates, select everything inside it (Cmd+A on a Mac, Ctrl+A on Windows), and copy it onto your card (not the fail-safe card).
-3. Check the card. Its top level should show the folders **Data**, **Logs**, **Meta** and **Mods** and two README/LICENSE files. If you see a single folder named *DiamondSkip_Install* instead, open it and move its contents up to the top level of the card.
+3. Check the card. Its top level should show the folders **Data**, **Logs**, **Meta** and **Mods**, plus the files **README.md** and **LICENSE.md**. If you see a single folder named *DiamondSkip_Install* instead, open it and move its contents up to the top level of the card.
 
 ### Step 5 (Mac only): Remove hidden Mac files
 
@@ -130,7 +130,7 @@ If you made a fail-safe card, do the same for it. Some "Operation not permitted"
 
 ### Step 8 (optional): Check the install log
 
-Put the install card back in your computer and open **Logs/DiamondSkip.log**. A successful install ends with:
+Put the install card back in your computer and open **Logs/DiamondSkip.log**. A successful install includes this line:
 
 ```
 OK: installed /mnt/app/eso/hmi/lsd/jars/diamondskip.jar
@@ -146,15 +146,13 @@ If it says **REFUSED** instead, nothing was changed – see [Troubleshooting](#t
 2. Format a card, copy the files onto it and (on a Mac) remove the hidden files, exactly as in steps 2, 4 and 5 above.
 3. In the car, follow step 6 again. When the PCM restarts, the mod is gone.
 
-The log on the card, **Logs/DiamondSkip.log**, should end with `OK: DiamondSkip removed`.
+The log on the card, **Logs/DiamondSkip.log**, should include the line `OK: DiamondSkip removed`.
 
 ---
 
 ## If something goes wrong: the fail-safe card
 
-If the PCM ever misbehaves after installing (for example, CarPlay won't start) and you can't run the uninstall card, use the fail-safe card:
-
-If you didn't make a fail-safe card during the install, make one now on any card or USB stick (steps 2, 3 and 5 above).
+If the PCM ever misbehaves after installing (for example, CarPlay won't start) and you can't run the uninstall card, use the fail-safe card. If you didn't make one during the install, make one now on any card or USB stick (steps 2, 3 and 5 above). Then:
 
 1. With the car running, insert the **fail-safe card**.
 2. Restart the PCM by holding the volume/power knob for about 10 seconds, until the screen goes black and the Porsche logo appears.
@@ -173,7 +171,7 @@ If your install log says **REFUSED** because of your software version, you can t
 
 1. **Make the fail-safe card first** (step 3 of the install). For an untested version it isn't optional.
 2. On the install card, open the **Mods/DiamondSkip** folder and create an empty file named **allow_untested.txt** in it:
-   - **Mac:** in Terminal, type `touch ` (with a space), drag the **DiamondSkip** folder from Finder into the Terminal window, type `/allow_untested.txt` and press Enter.
+   - **Mac:** open Terminal, type `cd ` (with a space), drag the **DiamondSkip** folder from Finder into the Terminal window and press Enter. Then type `touch allow_untested.txt` and press Enter.
    - **Windows:** right-click inside the folder, choose **New → Text Document**, and name it `allow_untested`. Windows adds the `.txt` itself, so check it isn't called `allow_untested.txt.txt`.
 3. On a Mac, remove the hidden files again (step 5), then install as normal (step 6).
 
@@ -204,7 +202,8 @@ Your car is on a PCM software version that hasn't been tested, so the installer 
 - Check the diamond button is set to *Next track* (**◇ button operation** → **PCM Functions** → **Next track**).
 - Make sure CarPlay is the audio source that's playing (not radio or Bluetooth).
 - Restart the PCM once by holding the volume/power knob for about 10 seconds.
-- Check **Logs/DiamondSkip.log** on the install card ends with `OK: installed`.
+- Check **Logs/DiamondSkip.log** on the install card includes `OK: installed`.
+- If you installed on an untested software version, the mod may have switched itself off because your PCM software is different. In that case it won't work on your car – uninstall it.
 
 **CarPlay won't start after installing.**
 Remove the mod with the uninstall card, or with the [fail-safe card](#if-something-goes-wrong-the-fail-safe-card) if you can't.
@@ -215,8 +214,9 @@ Remove the mod with the uninstall card, or with the [fail-safe card](#if-somethi
 
 The goal from day one was that nothing this mod does could "brick" the car. Here's what it touches and why it's low risk.
 
-- **It only adds one small file** (about 9 KB) to the PCM. It doesn't edit, replace or delete any Porsche files, and it doesn't touch the instrument cluster, the car's control units or how the PCM starts up.
-- **Removing that file puts everything back** exactly as it was. That's what the uninstall and fail-safe cards do.
+- **DiamondSkip only adds one small file** (about 11 KB) to the PCM. It doesn't edit, replace or delete any Porsche files, and it doesn't touch the instrument cluster or the car's control units.
+- **Removing that file removes the mod completely.** That's what the uninstall and fail-safe cards do.
+- **The ModKit adds one start-up hook, once.** The first time LawPaul's ModKit runs on a car, it installs a small hook into the PCM's start-up so that mods and the fail-safe card can work. This is the same for every ModKit mod, and it stays in place when you uninstall DiamondSkip. On its own it does nothing visible.
 - **It uses the same method as other well-known PCM mods.** The PCM already loads extra files from that folder at start-up, which is how the full screen CarPlay and cluster navigation mods work too.
 - **The installer is careful.** It stops without changing anything if your PCM software version isn't the tested one (unless you've chosen to allow it), if a file is missing, or if the copy fails.
 - **The mod checks itself at start-up.** Before switching on, it checks that the parts of Porsche's software it relies on look the same as on the tested version. If anything looks different, it stays switched off and the PCM carries on as normal.
@@ -268,7 +268,7 @@ DiamondSkip registers the missing handler. When the cluster's skip command arriv
 
 **`TMSkipOverJokerkey`** is the hook that gets the handler running. Porsche ships a class with this name in the CarPlay component. Its job is to make the *head unit's* joker key skip CarPlay tracks. It's created at start-up and is handed a reference to the CarPlay player, which is exactly what the handler needs.
 
-Our jar provides a replacement class with the same name, constructor and fields. Because mod jars load ahead of Porsche's code, ours is the one used. When the CarPlay component starts it:
+Our jar provides a replacement class with the same name and constructor. Because mod jars load ahead of Porsche's code, ours is the one used. When the CarPlay component starts it:
 
 1. Does everything Porsche's original did: it creates Porsche's own original listener class (by name, from Porsche's code) and attaches it to the joker key service exactly as before. So that feature behaves exactly as it did. If that listener's constructor is different on another software version, it matches the arguments by type instead. If that isn't possible either, it skips the listener and logs why, rather than failing start-up.
 2. Then runs the compatibility self-check and, if it passes, creates a `DiamondCarPlaySkip` and registers it with the PCM's service registry. All of this is inside a catch-all, so a failure can't affect the rest of start-up.
@@ -291,7 +291,7 @@ On the test car, 14 out of 14 presses over a drive skipped the track, each takin
 
 ### Building from source
 
-You need a JDK (11 or newer, so `--release 8` works), Python 3, and the PCM's `lsd.jar` **from your own car** – Porsche's code isn't included in this repo. The [ModKit](https://github.com/LawPaul/MH2p_SD_ModKit) can copy it to a USB stick.
+You need a JDK (11 or newer, so `--release 8` works), Python 3, and the PCM's `lsd.jar` **from your own car** – Porsche's code isn't included in this repo. It lives at `/mnt/app/eso/hmi/lsd/lsd.jar` on the PCM, and a small ModKit mod whose `install.sh` copies it to `$MEDIA_PATH` will put it on your card.
 
 ```
 ./build.sh /path/to/lsd.jar
@@ -311,7 +311,7 @@ Then put `diamondskip.jar` in `Mods/DiamondSkip/Update/` alongside `install.sh` 
 - `test/harness/` – the mock-service test that checks every cluster request gets the right reply.
 - `test/real-module/` – the test that runs Porsche's real `ServiceManagerAudio` against the handler.
 
-Both tests need `lsd.jar` from your own car on the classpath. `.gitignore` blocks jars and class files so Porsche's code can't be committed by accident.
+Both tests need `lsd.jar` from your own car on the classpath, and need to run with `-Xverify:none` because some of Porsche's classes depend on parts of the PCM that aren't present on a desktop. `.gitignore` blocks jars and class files so Porsche's code can't be committed by accident.
 
 Release zips bundle the ModKit (see [Credits and license](#credits-and-license)).
 
