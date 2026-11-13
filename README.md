@@ -51,20 +51,21 @@ It has been tested on:
 
 ### What you need
 
-- **Two SD cards, 32 GB or smaller.** One is for the install and one is the emergency fail-safe card. Cards larger than 32 GB are harder to format correctly. A USB stick also works if your car has a USB port the PCM reads from.
-- **A Mac or Windows computer** with an SD card reader.
+- **One SD card or USB stick, 32 GB or smaller.** Larger ones are harder to format correctly. Everywhere below, "card" means whichever you're using.
+- **Optional: a second card or USB stick** to use as an emergency fail-safe card you keep in the glovebox (see step 3). One is enough to install the mod.
+- **A Mac or Windows computer** with an SD card reader or USB port.
 - **About 15 minutes in the car** with the engine running.
 
-> **Never put the fail-safe file on the install card.** The fail-safe removes the mod every time the PCM starts with it inserted, so it would undo the install.
+> **Never put the fail-safe file on the install card.** The fail-safe removes the mod every time the PCM starts with it inserted, so it would undo the install. If you only have one card, skip the fail-safe for now – you can always reformat your card and make one later if you ever need it.
 
 ### Step 1: Download the files
 
 1. On this page, find **Releases** in the right-hand column (on a phone, scroll to the bottom) and click the latest release.
-2. Under **Assets** at the bottom of the release, download **DiamondSkip_Install.zip** and **DiamondSkip_FailSafe.zip**.
+2. Under **Assets** at the bottom of the release, download **DiamondSkip_Install.zip**. If you're making a fail-safe card, also download **DiamondSkip_FailSafe.zip**.
 
-### Step 2: Format both cards
+### Step 2: Format the card
 
-Do this for each card. **Formatting erases everything on the card.**
+If you're making a fail-safe card too, do this for both. **Formatting erases everything on the card.**
 
 **On a Mac:**
 1. Insert the card and open **Disk Utility** (press Cmd+Space, type *Disk Utility*, press Enter).
@@ -76,39 +77,41 @@ Do this for each card. **Formatting erases everything on the card.**
    - **Scheme:** Master Boot Record
 5. Click **Erase**, then **Done**.
 
-If Disk Utility shows an error, check the small lock switch on the side of the card is slid towards the contacts (unlocked) and try again.
+If Disk Utility shows an error with an SD card, check the small lock switch on its side is slid towards the contacts (unlocked) and try again.
 
 **On Windows:**
 1. Insert the card, open **File Explorer**, and right-click the card.
 2. Choose **Format**, set **File system** to **FAT32**, and click **Start**.
 
-### Step 3: Make the fail-safe card
+### Step 3 (optional): Make a fail-safe card
+
+Skip this if you only have one card.
 
 1. Open **DiamondSkip_FailSafe.zip** (double-click on a Mac; on Windows, right-click and choose **Extract All**).
-2. Copy **failsafe.sh** onto the first card. It should be the only file on the card.
-3. Label this card "FAIL-SAFE" and keep it in the glovebox. You'll probably never need it.
+2. Copy **failsafe.sh** onto your second card. It should be the only file on it.
+3. Label it "FAIL-SAFE" and keep it in the glovebox. You'll probably never need it.
 
 ### Step 4: Make the install card
 
 1. Open **DiamondSkip_Install.zip** the same way.
-2. Open the folder it creates, select everything inside it (Cmd+A on a Mac, Ctrl+A on Windows), and copy it onto the second card.
+2. Open the folder it creates, select everything inside it (Cmd+A on a Mac, Ctrl+A on Windows), and copy it onto your card (not the fail-safe card).
 3. Check the card. Its top level should show the folders **Data**, **Logs**, **Meta** and **Mods** and two README/LICENSE files. If you see a single folder named *DiamondSkip_Install* instead, open it and move its contents up to the top level of the card.
 
 ### Step 5 (Mac only): Remove hidden Mac files
 
-Macs quietly add hidden files to SD cards that confuse the PCM. Windows users can skip this step.
+Macs quietly add hidden files to SD cards and USB sticks that confuse the PCM. Windows users can skip this step.
 
 1. Open **Terminal** (press Cmd+Space, type *Terminal*, press Enter).
 2. Type `dot_clean -m ` (with a space at the end), then drag the card's icon from the Finder sidebar into the Terminal window and press Enter.
 3. Type `sudo find ` (with a space), drag the card in again, then type ` -name '._*' -delete` and press Enter. Enter your Mac password when asked. Nothing appears while you type it – that's normal.
 4. Eject the card in Finder.
 
-Do the same for the fail-safe card. Some "Operation not permitted" messages about `.Trashes` or `.Spotlight-V100` are harmless and can be ignored.
+If you made a fail-safe card, do the same for it. Some "Operation not permitted" messages about `.Trashes` or `.Spotlight-V100` are harmless and can be ignored.
 
 ### Step 6: Install in the car
 
 1. Start the car (the **engine must be running**, not just the ignition) and wait for the PCM to finish starting up.
-2. Insert the **install card** into the SD slot (in the centre console or glovebox, depending on your car). Make sure the card's lock switch is unlocked.
+2. Insert the **install card** into the SD slot or USB port (in the centre console or glovebox, depending on your car). If it's an SD card, make sure its lock switch is unlocked.
 3. Within about 10 seconds the PCM restarts and the install runs by itself. It takes a few minutes. You'll see a black **MH2p ModKit** screen, and the PCM may restart a few times and show some red engineering pages. **That's normal – don't touch anything and don't turn the car off.**
 4. When the screen says **"Please remove update media"**, remove the card.
 5. The PCM restarts into its normal screen with the mod installed.
@@ -143,6 +146,8 @@ The log on the card, **Logs/DiamondSkip.log**, should end with `OK: DiamondSkip 
 ## If something goes wrong: the fail-safe card
 
 If the PCM ever misbehaves after installing (for example, CarPlay won't start) and you can't run the uninstall card, use the fail-safe card:
+
+If you didn't make a fail-safe card during the install, make one now on any card or USB stick (steps 2, 3 and 5 above).
 
 1. With the car running, insert the **fail-safe card**.
 2. Restart the PCM by holding the volume/power knob for about 10 seconds, until the screen goes black and the Porsche logo appears.
