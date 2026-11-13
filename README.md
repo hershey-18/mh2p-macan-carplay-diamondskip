@@ -1,6 +1,6 @@
 # DiamondSkip – make the Porsche diamond button skip tracks in Apple CarPlay
 
-On 2019–2021 Porsche Macans with PCM 5, the diamond button on the steering wheel can be set to *Next Track*. That works for the radio, USB and Bluetooth audio, but does nothing in Apple CarPlay. If you listen to Spotify, Apple Music or podcasts through CarPlay, the button is dead. The usual answers are "buy a hardware module" or "buy a 2022+ car".
+On 2019–2021 Porsche Macans with PCM 5, the diamond button on the steering wheel can be set to *Next track*. That works for the radio, USB and Bluetooth audio, but does nothing in Apple CarPlay. If you listen to Spotify, Apple Music or podcasts through CarPlay, the button is dead. The usual answers are "buy a hardware module" or "buy a 2022+ car".
 
 DiamondSkip is a free software fix that you install from an SD card in about 15 minutes. Once it's installed, pressing the diamond button while CarPlay audio is playing skips to the next track, just like pressing next on your phone.
 
@@ -115,7 +115,7 @@ Do the same for the fail-safe card. Some "Operation not permitted" messages abou
 
 ### Step 7: Set up the button and test it
 
-1. Make sure the diamond button is set to **Next Track** (listed under **PCM functions** in the steering wheel button settings).
+1. In the PCM settings, set the diamond button to *Next track*. The setting is three menus deep: **◇ button operation** → **PCM Functions** → **Next track**.
 2. Connect CarPlay, play something in Spotify or Apple Music, and press the diamond button. The track should skip.
 
 ### Step 8 (optional): Check the install log
@@ -168,7 +168,7 @@ Reformat the card and copy the files again, or try a different card. The card ma
 Your car is on a PCM software version that hasn't been tested yet, so the installer stopped without changing anything. The log's **Release:** line shows your version. Please [open an issue](../../issues) with it.
 
 **The install worked but the button still doesn't skip.**
-- Check the diamond button is set to **Next Track** under **PCM functions**.
+- Check the diamond button is set to *Next track* (**◇ button operation** → **PCM Functions** → **Next track**).
 - Make sure CarPlay is the audio source that's playing (not radio or Bluetooth).
 - Restart the PCM once by holding the volume/power knob for about 10 seconds.
 - Check **Logs/DiamondSkip.log** on the install card ends with `OK: installed`.
@@ -196,7 +196,7 @@ That said, this is unofficial software. It may come up in a warranty conversatio
 
 ## Limitations
 
-- **Skip forward only.** The diamond button set to *Next Track* only sends "next". There's no way to go back a track with it.
+- **Skip forward only.** The diamond button set to *Next track* only sends "next". There's no way to go back a track with it.
 - **No press-and-hold to fast-forward.**
 - **One PCM software version so far.** Only `MH2p_US_PO416_P2656` is enabled. Others are blocked by the installer until someone tests them.
 - **Dealer updates.** A PCM software update at the dealer may remove the mod or change the code it relies on. Don't reinstall it on a new software version until that version has been checked.
@@ -222,7 +222,7 @@ DiamondSkip registers the missing handler. When the cluster's skip command arriv
 
 **`DiamondCarPlaySkip`** is the handler itself. It implements the two cluster-audio listener interfaces Porsche's code expects.
 
-- **Skip:** when the cluster asks for a skip, it works out the direction from the sign of the count (the diamond button set to *Next Track* always sends forward), clamps the number of steps between one and five, and for each step sends a press followed by a release to the CarPlay player. It then looks up the cluster's CarPlay audio service and reports the result, so the cluster isn't left waiting.
+- **Skip:** when the cluster asks for a skip, it works out the direction from the sign of the count (the diamond button set to *Next track* always sends forward), clamps the number of steps between one and five, and for each step sends a press followed by a release to the CarPlay player. It then looks up the cluster's CarPlay audio service and reports the result, so the cluster isn't left waiting.
 - **Other requests:** the same interfaces include other requests the cluster might send, such as seeking, changing source or selecting list entries. CarPlay doesn't support those through this path, so the handler gives the cluster a proper answer instead of silence:
   - Seek requests get a "seek stopped" status (sent shortly after the request, so the cluster sees the request acknowledged and then finished).
   - Source-switch requests get a "not possible" result.
