@@ -45,7 +45,9 @@ It has been tested on:
 | **Phone connection** | Wireless CarPlay, Spotify |
 | **Other mods installed** | LawPaul full screen CarPlay, fifthBro cluster navigation v1105 |
 
-**In theory it should work on any pre-2022 Macan with PCM 5** – the Macan, Macan S and Macan GTS from the 2019 facelift onwards. They all use the same PCM and have the same diamond button problem. Older Macans with PCM 4 or earlier (roughly 2015–2018) use different hardware, and the mod won't install on them.
+**In theory it should work on any pre-2022 Macan with PCM 5** – the Macan, Macan S, Macan GTS and Macan Turbo from the 2019 facelift onwards. They all use the same PCM and have the same diamond button problem. Older Macans with PCM 4 or earlier (roughly 2015–2018) use different hardware, and the mod won't install on them.
+
+> ⚠️ **So far it has only been tested on, and only installs on, PCM software version `MH2p_US_PO416_P2656`.** Even on a compatible car, the installer will refuse to run on any other software version until that version has been checked.
 
 **You don't need to look up your software version first.** The installer checks it for you. If your car is on a different version, the installer stops without changing anything, and its log says so. If that happens, please see [Helping with other cars and software versions](#helping-with-other-cars-and-software-versions).
 
