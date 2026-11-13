@@ -35,18 +35,17 @@ If this saved you buying a module, tips are appreciated: [Buy Me a Coffee](https
 
 ## Will it work on my car?
 
-It has been tested on:
+It has been tested on two PCM software versions, **2656** and **2648**:
 
 | | |
 |---|---|
 | **Car** | 2020 Porsche Macan S, US |
 | **Infotainment** | PCM 5 (the system is also known as MH2p) |
-| **PCM software version** | `MH2p_US_PO416_P2656` |
+| **PCM software versions** | `MH2p_US_PO416_P2656` (my 2020 Macan S) and `2648` (another owner's Macan, reported working) |
 | **Phone connection** | Wireless CarPlay, Spotify |
 | **Other mods installed** | LawPaul full screen CarPlay, fifthBro cluster navigation v1105 |
-| **Also reported working** | PCM software version 2648 (another owner's Macan) |
 
-**In theory it should work on any pre-2022 Macan with PCM 5** – the Macan, Macan S, Macan GTS and Macan Turbo from the 2019 facelift onwards. They all use the same PCM and have the same diamond button problem. Older Macans with PCM 4 or earlier (roughly 2015–2018) use different hardware, and the mod won't install on them.
+**In theory it should work on any pre-2022 Macan with PCM 5, on any PCM software version** – the Macan, Macan S, Macan GTS and Macan Turbo from the 2019 facelift onwards. They all use the same PCM and have the same diamond button problem, and the parts of Porsche's software the mod relies on are expected to be the same across versions. Older Macans with PCM 4 or earlier (roughly 2015–2018) use different hardware, and the mod won't install on them.
 
 > ⚠️ **Only PCM software versions 2656 and 2648 have been tested.** On any other PCM 5 version the installer still installs the mod, but writes an **UNTESTED** warning to its log. It should work, but it's at your own risk, and making the [fail-safe card](#step-3-optional-make-a-fail-safe-card) first is strongly recommended.
 
