@@ -1,0 +1,7 @@
+# Never commit Porsche code or build output
+*.jar
+*.class
+out/
+lsd/
+.DS_Store
+._*
