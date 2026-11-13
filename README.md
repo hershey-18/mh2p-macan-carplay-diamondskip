@@ -12,6 +12,8 @@ DiamondSkip is a free software fix that you install from an SD card in about 15 
 
 > ⚠️ **This changes software in your car and was tested on one car. You use it at your own risk.** Read [Will it work on my car?](#will-it-work-on-my-car) and [Is it safe?](#is-it-safe) before you start.
 
+**[⬇️ Download the latest release](https://github.com/hershey-18/mh2p-macan-carplay-diamondskip/releases/latest)** – then follow [Install step by step](#install-step-by-step).
+
 If this saved you buying a module, tips are appreciated: [Buy Me a Coffee](https://buymeacoffee.com/hershey18) ☕
 
 ---
@@ -60,8 +62,8 @@ It has been tested on:
 
 ### Step 1: Download the files
 
-1. On this page, find **Releases** in the right-hand column (on a phone, scroll to the bottom) and click the latest release.
-2. Under **Assets** at the bottom of the release, download **DiamondSkip_Install.zip**. If you're making a fail-safe card, also download **DiamondSkip_FailSafe.zip**.
+1. Open the **[latest release](https://github.com/hershey-18/mh2p-macan-carplay-diamondskip/releases/latest)**.
+2. Under **Assets** at the bottom of the page, download **DiamondSkip_Install.zip**. If you're making a fail-safe card, also download **DiamondSkip_FailSafe.zip**.
 
 ### Step 2: Format the card
 
@@ -135,7 +137,7 @@ If it says **REFUSED** instead, nothing was changed – see [Troubleshooting](#t
 
 ## Uninstall
 
-1. Download **DiamondSkip_Uninstall.zip** from [Releases](../../releases).
+1. Download **DiamondSkip_Uninstall.zip** from the **[latest release](https://github.com/hershey-18/mh2p-macan-carplay-diamondskip/releases/latest)**.
 2. Format a card, copy the files onto it and (on a Mac) remove the hidden files, exactly as in steps 2, 4 and 5 above.
 3. In the car, follow step 6 again. When the PCM restarts, the mod is gone.
 
