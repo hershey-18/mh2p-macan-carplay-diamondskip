@@ -24,11 +24,12 @@ If this saved you buying a module, tips are appreciated: [Buy Me a Coffee](https
 - [Install step by step](#install-step-by-step)
 - [Uninstall](#uninstall)
 - [If something goes wrong: the fail-safe card](#if-something-goes-wrong-the-fail-safe-card)
+- [Installing on an untested software version](#installing-on-an-untested-software-version)
 - [Troubleshooting](#troubleshooting)
 - [Is it safe?](#is-it-safe)
 - [Limitations](#limitations)
 - [For the technically curious](#for-the-technically-curious)
-- [Helping with other cars and software versions](#helping-with-other-cars-and-software-versions)
+- [Support](#support)
 - [Credits and license](#credits-and-license)
 
 ---
@@ -47,9 +48,9 @@ It has been tested on:
 
 **In theory it should work on any pre-2022 Macan with PCM 5** – the Macan, Macan S, Macan GTS and Macan Turbo from the 2019 facelift onwards. They all use the same PCM and have the same diamond button problem. Older Macans with PCM 4 or earlier (roughly 2015–2018) use different hardware, and the mod won't install on them.
 
-> ⚠️ **So far it has only been tested on, and only installs on, PCM software version `MH2p_US_PO416_P2656`.** Even on a compatible car, the installer will refuse to run on any other software version until that version has been checked.
+> ⚠️ **It has only been tested on PCM software version `MH2p_US_PO416_P2656`.** By default the installer only installs on that version. On any other version it stops without changing anything, but you can choose to install anyway at your own risk – see [Installing on an untested software version](#installing-on-an-untested-software-version).
 
-**You don't need to look up your software version first.** The installer checks it for you. If your car is on a different version, the installer stops without changing anything, and its log says so. If that happens, please see [Helping with other cars and software versions](#helping-with-other-cars-and-software-versions).
+**You don't need to look up your software version first.** The installer checks it for you, and the install log shows it on the **Release:** line.
 
 ---
 
@@ -164,6 +165,27 @@ The fail-safe deletes the mod's file and writes what it did to **failsafe_log.tx
 
 ---
 
+## Installing on an untested software version
+
+> ⚠️ **At your own risk.** DiamondSkip has only been tested on `MH2p_US_PO416_P2656`. It should work on other PCM 5 versions, but that hasn't been tested, and no help is available if it doesn't.
+
+If your install log says **REFUSED** because of your software version, you can tell the installer to go ahead anyway:
+
+1. **Make the fail-safe card first** (step 3 of the install). For an untested version it isn't optional.
+2. On the install card, open the **Mods/DiamondSkip** folder and create an empty file named **allow_untested.txt** in it:
+   - **Mac:** in Terminal, type `touch ` (with a space), drag the **DiamondSkip** folder from Finder into the Terminal window, type `/allow_untested.txt` and press Enter.
+   - **Windows:** right-click inside the folder, choose **New → Text Document**, and name it `allow_untested`. Windows adds the `.txt` itself, so check it isn't called `allow_untested.txt.txt`.
+3. On a Mac, remove the hidden files again (step 5), then install as normal (step 6).
+
+The log will show **WARNING: UNTESTED software version** lines, followed by `OK: installed`.
+
+**What happens on an untested version:**
+- **Most likely:** it works exactly as on the tested version.
+- **If Porsche changed the code the mod relies on:** the mod notices at start-up and stays switched off. The button won't skip, but nothing else changes. You can uninstall it whenever you like.
+- **Worst realistic case:** a change the mod can't detect makes CarPlay misbehave. Remove the mod with the uninstall card, or the [fail-safe card](#if-something-goes-wrong-the-fail-safe-card) if you can't.
+
+---
+
 ## Troubleshooting
 
 **Nothing happens when I insert the card, or the PCM says "update not supported".**
@@ -176,7 +198,7 @@ The engine needs to be running, not just the ignition.
 Reformat the card and copy the files again, or try a different card. The card may be faulty.
 
 **The log says REFUSED.**
-Your car is on a PCM software version that hasn't been tested yet, so the installer stopped without changing anything. The log's **Release:** line shows your version. Please [open an issue](../../issues) with it.
+Your car is on a PCM software version that hasn't been tested, so the installer stopped without changing anything. The log's **Release:** line shows your version. If you want to try it anyway, see [Installing on an untested software version](#installing-on-an-untested-software-version).
 
 **The install worked but the button still doesn't skip.**
 - Check the diamond button is set to *Next track* (**◇ button operation** → **PCM Functions** → **Next track**).
@@ -185,7 +207,7 @@ Your car is on a PCM software version that hasn't been tested yet, so the instal
 - Check **Logs/DiamondSkip.log** on the install card ends with `OK: installed`.
 
 **CarPlay won't start after installing.**
-Remove the mod with the uninstall card, or with the [fail-safe card](#if-something-goes-wrong-the-fail-safe-card) if you can't. Then please [open an issue](../../issues).
+Remove the mod with the uninstall card, or with the [fail-safe card](#if-something-goes-wrong-the-fail-safe-card) if you can't.
 
 ---
 
@@ -196,7 +218,8 @@ The goal from day one was that nothing this mod does could "brick" the car. Here
 - **It only adds one small file** (about 9 KB) to the PCM. It doesn't edit, replace or delete any Porsche files, and it doesn't touch the instrument cluster, the car's control units or how the PCM starts up.
 - **Removing that file puts everything back** exactly as it was. That's what the uninstall and fail-safe cards do.
 - **It uses the same method as other well-known PCM mods.** The PCM already loads extra files from that folder at start-up, which is how the full screen CarPlay and cluster navigation mods work too.
-- **The installer is careful.** It stops without changing anything if your PCM software version isn't the tested one, if a file is missing, or if the copy fails.
+- **The installer is careful.** It stops without changing anything if your PCM software version isn't the tested one (unless you've chosen to allow it), if a file is missing, or if the copy fails.
+- **The mod checks itself at start-up.** Before switching on, it checks that the parts of Porsche's software it relies on look the same as on the tested version. If anything looks different, it stays switched off and the PCM carries on as normal.
 - **The code is careful too.** If anything goes wrong inside the mod, it's caught and logged rather than passed on to Porsche's software, and CarPlay carries on as if the mod weren't there.
 
 **Worst realistic case:** CarPlay misbehaves (for example, it doesn't start). You'd remove the mod with the uninstall or fail-safe card. The radio, cameras and the car's own functions aren't involved.
@@ -209,8 +232,8 @@ That said, this is unofficial software. It may come up in a warranty conversatio
 
 - **Skip forward only.** The diamond button set to *Next track* only sends "next". There's no way to go back a track with it.
 - **No press-and-hold to fast-forward.**
-- **One PCM software version so far.** Only `MH2p_US_PO416_P2656` is enabled. Others are blocked by the installer until someone tests them.
-- **Dealer updates.** A PCM software update at the dealer may remove the mod or change the code it relies on. Don't reinstall it on a new software version until that version has been checked.
+- **One tested PCM software version.** Only `MH2p_US_PO416_P2656` has been tested. Other versions need the [opt-in](#installing-on-an-untested-software-version) and are at your own risk.
+- **Dealer updates.** A PCM software update at the dealer may remove the mod or change the code it relies on. Reinstalling on the new version counts as an untested version.
 - **Wired CarPlay, other apps and other models** haven't been tested. The mod works on the CarPlay session itself rather than the connection, so wired CarPlay and other CarPlay audio apps should behave the same.
 
 ---
@@ -233,6 +256,8 @@ DiamondSkip registers the missing handler. When the cluster's skip command arriv
 
 **`DiamondCarPlaySkip`** is the handler itself. It implements the two cluster-audio listener interfaces Porsche's code expects.
 
+- **Compatibility self-check:** before the handler is registered, it uses reflection to confirm that Porsche's two listener interfaces contain only methods the handler implements, with matching parameters and return types, and that the CarPlay player and cluster audio service still have the methods it calls. If anything differs, it isn't registered and the reason is logged.
+
 - **Skip:** when the cluster asks for a skip, it works out the direction from the sign of the count (the diamond button set to *Next track* always sends forward), clamps the number of steps between one and five, and for each step sends a press followed by a release to the CarPlay player. It then looks up the cluster's CarPlay audio service and reports the result, so the cluster isn't left waiting.
 - **Other requests:** the same interfaces include other requests the cluster might send, such as seeking, changing source or selecting list entries. CarPlay doesn't support those through this path, so the handler gives the cluster a proper answer instead of silence:
   - Seek requests get a "seek stopped" status (sent shortly after the request, so the cluster sees the request acknowledged and then finished).
@@ -245,8 +270,8 @@ DiamondSkip registers the missing handler. When the cluster's skip command arriv
 
 Our jar provides a replacement class with the same name, constructor and fields. Because mod jars load ahead of Porsche's code, ours is the one used. When the CarPlay component starts it:
 
-1. Does everything Porsche's original did: it creates Porsche's own original listener class (by name, from Porsche's code) and attaches it to the joker key service exactly as before. So that feature behaves exactly as it did.
-2. Then creates a `DiamondCarPlaySkip` and registers it with the PCM's service registry, inside a catch-all so a failure can't affect the rest of start-up.
+1. Does everything Porsche's original did: it creates Porsche's own original listener class (by name, from Porsche's code) and attaches it to the joker key service exactly as before. So that feature behaves exactly as it did. If that listener's constructor is different on another software version, it matches the arguments by type instead. If that isn't possible either, it skips the listener and logs why, rather than failing start-up.
+2. Then runs the compatibility self-check and, if it passes, creates a `DiamondCarPlaySkip` and registers it with the PCM's service registry. All of this is inside a catch-all, so a failure can't affect the rest of start-up.
 
 When the component shuts down, it closes the joker key tracker and unregisters the handler.
 
@@ -292,15 +317,9 @@ Release zips bundle the ModKit (see [Credits and license](#credits-and-license))
 
 ---
 
-## Helping with other cars and software versions
+## Support
 
-If your install log says REFUSED, or you have a PCM 5 car on a different software version and you're comfortable testing, please [open an issue](../../issues) with:
-
-- Model, model year and region.
-- Your PCM software version (for example `MH2p_US_PO416_P2656`), from the **Release:** line of **Logs/DiamondSkip.log**.
-- Whether the diamond button works for Bluetooth audio but not CarPlay.
-
-The code it hooks into has to be checked against each firmware's `lsd.jar` before the installer's version check is widened. Please don't edit the version check yourself.
+DiamondSkip is provided **as is**, for free. I'm sharing it because it worked on my car, but I don't provide support, troubleshooting help or versions for other cars, and I don't take feature requests. Everything I know about installing it and fixing problems is in this README.
 
 ---
 
@@ -310,6 +329,6 @@ The code it hooks into has to be checked against each firmware's `lsd.jar` befor
 - **[fifthBro](https://github.com/fifthBro)** for [mh2p-cluster](https://github.com/fifthBro/mh2p-cluster), whose work on the CarPlay internals was a useful reference.
 - Everyone on Rennlist, Macanforum and r/Macan who documented the problem.
 
-DiamondSkip is Copyright © 2026 hershey-18 and is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0)](LICENSE) – the same license as the ModKit. You're free to use, share and modify it for **non-commercial** purposes, as long as you credit this project and release any modified version under the same license. **Selling it, charging to install it, or bundling it into a paid product is not allowed** without permission. If you're interested in commercial use, open an issue to get in touch. Porsche, Macan and PCM are trademarks of Dr. Ing. h.c. F. Porsche AG. This project is not affiliated with or endorsed by Porsche, Audi or Volkswagen Group.
+DiamondSkip is Copyright © 2026 hershey-18 and is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0)](LICENSE) – the same license as the ModKit. You're free to use, share and modify it for **non-commercial** purposes, as long as you credit this project and release any modified version under the same license. **Selling it, charging to install it, or bundling it into a paid product is not allowed** without permission.  Porsche, Macan and PCM are trademarks of Dr. Ing. h.c. F. Porsche AG. This project is not affiliated with or endorsed by Porsche, Audi or Volkswagen Group.
 
 **No warranty.** This software is provided as is. You are responsible for anything you install on your car.

@@ -40,7 +40,7 @@ public class RealModuleTest {
             return null; });
         Object handler = c("de.audi.app.terminalmode.hmi.DiamondCarPlaySkip").getConstructors()[0].newInstance(logger, sm, player);
 
-        Object ctx = proxy("org.osgi.framework.BundleContext", (p, m, a) -> m.getName().equals("getService") ? handler : null);
+        Object ctx = proxy("org.osgi.framework.BundleContext", (p, m, a) -> m.getName().equals("getService") ? handler : m.getName().equals("ungetService") ? Boolean.TRUE : null);
         Object ref = proxy("org.osgi.framework.ServiceReference", (p, m, a) -> null);
         Object mgr = alloc("de.audi.app.combi.bap.app.audio.ServiceManagerAudio");
         set(mgr, "de.audi.app.bap.fw.AbstractBAPModuleServiceManager", "module", module);

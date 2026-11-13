@@ -6,6 +6,7 @@ import de.audi.app.terminalmode.osgi.IServiceManager;
 import de.audi.app.terminalmode.osgi.IServiceTracker;
 import de.audi.app.terminalmode.smartphone.IPlayerModificationListener;
 import de.audi.app.terminalmode.smartphone.ISmartphoneProperties;
+import java.lang.reflect.Constructor;
 import org.osgi.framework.ServiceRegistration;
 
 public class TMSkipOverJokerkey implements ITerminalModeComponent {
@@ -35,27 +36,40 @@ public class TMSkipOverJokerkey implements ITerminalModeComponent {
         Class jokerServiceClass;
         try {
             jokerServiceClass = Class.forName(JOKER_SERVICE);
-        } catch (ClassNotFoundException e) {
-            throw new NoClassDefFoundError(JOKER_SERVICE);
+            org.osgi.util.tracker.ServiceTrackerCustomizer original = createOriginalJokerKeyListener();
+            if (original != null) {
+                this.jokerKeyApiTracker = this.serviceManager.createServiceTracker(jokerServiceClass, original);
+                this.jokerKeyApiTracker.open();
+            } else {
+                DiamondCarPlaySkip.log(this.logger, "original joker key listener not available, skipped");
+            }
+        } catch (Throwable t) {
+            this.jokerKeyApiTracker = null;
+            DiamondCarPlaySkip.log(this.logger, DiamondCarPlaySkip.concat("original joker key listener not started: ", t));
         }
-        this.jokerKeyApiTracker = this.serviceManager.createServiceTracker(jokerServiceClass,
-                createOriginalJokerKeyListener());
-        this.jokerKeyApiTracker.open();
 
         registerDiamondSkip();
     }
 
     public void deinit() {
-        if (this.jokerKeyApiTracker != null) {
-            this.jokerKeyApiTracker.close();
-            this.jokerKeyApiTracker = null;
+        try {
+            if (this.jokerKeyApiTracker != null) {
+                this.jokerKeyApiTracker.close();
+            }
+        } catch (Throwable t) {
+            DiamondCarPlaySkip.log(this.logger, DiamondCarPlaySkip.concat("closing joker key tracker failed: ", t));
         }
+        this.jokerKeyApiTracker = null;
         unregisterDiamondSkip();
     }
 
-    private org.osgi.util.tracker.ServiceTrackerCustomizer createOriginalJokerKeyListener() {
+    private org.osgi.util.tracker.ServiceTrackerCustomizer createOriginalJokerKeyListener() throws Exception {
+        Class listenerClass = Class.forName(JOKER_LISTENER);
+        Object[] available = new Object[] {
+            this, this.serviceManager, this.smartphoneProperties,
+            this.playerModificationListener, this.logger
+        };
         try {
-            Class listenerClass = Class.forName(JOKER_LISTENER);
             Class[] types = new Class[] {
                 Class.forName("de.audi.app.terminalmode.hmi.TMSkipOverJokerkey"),
                 Class.forName("de.audi.app.terminalmode.osgi.IServiceManager"),
@@ -63,22 +77,55 @@ public class TMSkipOverJokerkey implements ITerminalModeComponent {
                 Class.forName("de.audi.app.terminalmode.smartphone.IPlayerModificationListener"),
                 Class.forName("de.audi.app.terminalmode.ITerminalLogger")
             };
-            Object[] args = new Object[] {
-                this, this.serviceManager, this.smartphoneProperties,
-                this.playerModificationListener, this.logger
-            };
-            return (org.osgi.util.tracker.ServiceTrackerCustomizer)
-                    listenerClass.getConstructor(types).newInstance(args);
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new NoClassDefFoundError(JOKER_LISTENER);
+            return asCustomizer(listenerClass.getConstructor(types).newInstance(available));
+        } catch (NoSuchMethodException e) {
+            DiamondCarPlaySkip.log(this.logger, "original joker key listener has a different constructor, trying to match it");
         }
+        Constructor[] constructors = listenerClass.getDeclaredConstructors();
+        for (int c = 0; c < constructors.length; c++) {
+            Object[] args = matchArguments(constructors[c].getParameterTypes(), available);
+            if (args != null) {
+                constructors[c].setAccessible(true);
+                return asCustomizer(constructors[c].newInstance(args));
+            }
+        }
+        return null;
+    }
+
+    private static Object[] matchArguments(Class[] types, Object[] available) {
+        Object[] args = new Object[types.length];
+        boolean[] used = new boolean[available.length];
+        for (int i = 0; i < types.length; i++) {
+            for (int a = 0; a < available.length; a++) {
+                if (!used[a] && available[a] != null && types[i].isInstance(available[a])) {
+                    args[i] = available[a];
+                    used[a] = true;
+                    break;
+                }
+            }
+            if (args[i] == null) {
+                return null;
+            }
+        }
+        return args;
+    }
+
+    private static org.osgi.util.tracker.ServiceTrackerCustomizer asCustomizer(Object o) {
+        if (o instanceof org.osgi.util.tracker.ServiceTrackerCustomizer) {
+            return (org.osgi.util.tracker.ServiceTrackerCustomizer) o;
+        }
+        return null;
     }
 
     private void registerDiamondSkip() {
         try {
             if (this.diamondRegistration != null) {
+                return;
+            }
+            String problem = DiamondCarPlaySkip.compatibilityProblem();
+            if (problem != null) {
+                DiamondCarPlaySkip.log(this.logger,
+                        DiamondCarPlaySkip.concat("not registering, this PCM software does not match: ", problem));
                 return;
             }
             Class listenerClass = Class.forName(REGISTER_AS);
