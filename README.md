@@ -11,7 +11,7 @@ DiamondSkip is a small software mod, installed from an SD card with [LawPaul's M
 
 > ⚠️ **Read the [Safety](#safety) and [Compatibility](#compatibility) sections before installing.** This modifies software in your car. It was built and tested on one car. You use it at your own risk.
 
-If this saved you buying a module, tips are appreciated: [GitHub Sponsors](https://github.com/sponsors/hershey-18) · [Buy Me a Coffee](https://buymeacoffee.com/YOUR-USERNAME)
+If this saved you buying a module, tips are appreciated: [Buy Me a Coffee](https://buymeacoffee.com/hershey18) ☕
 
 ---
 
@@ -36,7 +36,7 @@ If this saved you buying a module, tips are appreciated: [GitHub Sponsors](https
 | **Tested car** | 2020 Porsche Macan S (95B.2), US |
 | **Head unit** | PCM 5 / MH2p |
 | **Firmware** | `MH2p_US_PO416_P2656` |
-| **Tested with** | Spotify over wired CarPlay, diamond button set to *Next Track* |
+| **Tested with** | Spotify over wireless CarPlay, diamond button set to *Next Track* |
 | **Tested alongside** | LawPaul full screen CarPlay, fifthBro mh2p-cluster v1105 |
 
 The installer **checks the firmware version and refuses to install on anything other than PO416 / 2656.** If your car is on different firmware, nothing is changed and the ModKit log says so. See [Helping with other cars and firmware](#helping-with-other-cars-and-firmware) if you'd like to help extend support.
@@ -160,7 +160,7 @@ On the test car, 14 out of 14 presses over a drive skipped the track, each takin
 - **No press-and-hold seek.** If the cluster asks to seek, the mod tells it seeking has stopped rather than scrubbing through the track.
 - **One firmware version.** Only `MH2p_US_PO416_P2656` is enabled. Others are blocked by the installer until someone tests them.
 - **Dealer updates.** A PCM software update at the dealer may remove the mod or change the code it relies on. Don't reinstall on new firmware until it has been checked.
-- **Wireless CarPlay, other apps and other models** are untested, though there's no obvious reason other CarPlay audio apps would behave differently.
+- **Wired CarPlay, other apps and other models** are untested. The mod works at the level of the CarPlay session rather than the connection, so wired CarPlay and other CarPlay audio apps are expected to behave the same.
 
 ---
 
