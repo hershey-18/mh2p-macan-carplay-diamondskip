@@ -10,7 +10,7 @@ DiamondSkip is a small software mod, installed from an SD card with [LawPaul's M
 
 > ⚠️ **Read the [Safety](#safety) and [Compatibility](#compatibility) sections before installing.** This modifies software in your car. It was built and tested on one car. You use it at your own risk.
 
-If this saved you buying a module, tips are appreciated: [GitHub Sponsors](https://github.com/sponsors/YOUR-USERNAME) · [Buy Me a Coffee](https://buymeacoffee.com/YOUR-USERNAME)
+If this saved you buying a module, tips are appreciated: [GitHub Sponsors](https://github.com/sponsors/hershey-18) · [Buy Me a Coffee](https://buymeacoffee.com/YOUR-USERNAME)
 
 ---
 
@@ -272,6 +272,6 @@ The code it hooks into has to be checked against each firmware's `lsd.jar` befor
 - **[fifthBro](https://github.com/fifthBro)** for [mh2p-cluster](https://github.com/fifthBro/mh2p-cluster), whose work on the CarPlay internals was a useful reference.
 - Everyone on Rennlist, Macanforum and r/Macan who documented the problem.
 
-DiamondSkip's own code is released under the **LICENSE-NAME** license. Porsche, Macan and PCM are trademarks of Dr. Ing. h.c. F. Porsche AG. This project is not affiliated with or endorsed by Porsche, Audi or Volkswagen Group.
+DiamondSkip's own code (everything in this repo except the bundled ModKit in the release zips) is released under the [MIT license](LICENSE). Porsche, Macan and PCM are trademarks of Dr. Ing. h.c. F. Porsche AG. This project is not affiliated with or endorsed by Porsche, Audi or Volkswagen Group.
 
 **No warranty.** This software is provided as is. You are responsible for anything you install on your car.
