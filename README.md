@@ -58,7 +58,7 @@ It has been tested on:
 
 ### What you need
 
-- **One SD card or USB stick, 32 GB or smaller.** Larger ones are harder to format correctly. Everywhere below, "card" means whichever you're using.
+- **One SD card or USB stick.** 32 GB or smaller is easiest. Larger ones work too, but they must be formatted as FAT32: easy on a Mac, while on Windows you'll need a free tool like [Rufus](https://rufus.ie). Everywhere below, "card" means whichever you're using.
 - **Optional: a second card or USB stick** to use as an emergency fail-safe card you keep in the glovebox (see step 3). One is enough to install the mod.
 - **A Mac or Windows computer** with an SD card reader or USB port.
 - **About 15 minutes in the car** with the engine running.
@@ -89,6 +89,8 @@ If Disk Utility shows an error with an SD card, check the small lock switch on i
 **On Windows:**
 1. Insert the card, open **File Explorer**, and right-click the card.
 2. Choose **Format**, set **File system** to **FAT32**, and click **Start**.
+
+If FAT32 isn't offered, the card is larger than 32 GB. Use a free tool like [Rufus](https://rufus.ie) to format it as FAT32 instead, or use a smaller card.
 
 ### Step 3 (optional): Make a fail-safe card
 
