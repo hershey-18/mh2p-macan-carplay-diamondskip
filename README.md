@@ -1,6 +1,6 @@
 # DiamondSkip – make the Porsche diamond button skip tracks in Apple CarPlay
 
-On pre-2022 Porsche Macans with PCM 5, the steering wheel "diamond" (joker) button can be set to *Next*. That works for the radio, USB and Bluetooth audio, but does nothing at all in Apple CarPlay – so if you listen to Spotify, Apple Music or anything else through CarPlay, the button is dead. This is a long-standing complaint on Rennlist, Macanforum and r/Macan, and the usual answer is "buy a hardware module" or "buy a 2022+ car."
+On pre-2022 Porsche Macans with PCM 5, the steering wheel "diamond" (joker) button can be set to *Next Track*. That works for the radio, USB and Bluetooth audio, but does nothing at all in Apple CarPlay – so if you listen to Spotify, Apple Music or anything else through CarPlay, the button is dead. This is a long-standing complaint on Rennlist, Macanforum and r/Macan, and the usual answer is "buy a hardware module" or "buy a 2022+ car."
 
 DiamondSkip is a small software mod, installed from an SD card with [LawPaul's MH2p SD ModKit](https://github.com/LawPaul/MH2p_SD_ModKit), that fixes it. Press the diamond button while CarPlay audio is playing and the track skips forward, exactly like pressing next on the phone.
 
@@ -22,7 +22,6 @@ If this saved you buying a module, tips are appreciated: [GitHub Sponsors](https
 - [Uninstall](#uninstall)
 - [Safety](#safety)
 - [What the mod actually does](#what-the-mod-actually-does)
-- [How we figured it out](#how-we-figured-it-out)
 - [Limitations](#limitations)
 - [Building from source](#building-from-source)
 - [Helping with other cars and firmware](#helping-with-other-cars-and-firmware)
@@ -37,7 +36,7 @@ If this saved you buying a module, tips are appreciated: [GitHub Sponsors](https
 | **Tested car** | 2020 Porsche Macan S (95B.2), US |
 | **Head unit** | PCM 5 / MH2p |
 | **Firmware** | `MH2p_US_PO416_P2656` |
-| **Tested with** | Spotify over wired CarPlay, diamond button set to *Next* |
+| **Tested with** | Spotify over wired CarPlay, diamond button set to *Next Track* |
 | **Tested alongside** | LawPaul full screen CarPlay, fifthBro mh2p-cluster v1105 |
 
 The installer **checks the firmware version and refuses to install on anything other than PO416 / 2656.** If your car is on different firmware, nothing is changed and the ModKit log says so. See [Helping with other cars and firmware](#helping-with-other-cars-and-firmware) if you'd like to help extend support.
@@ -60,7 +59,7 @@ You need an SD card (or USB stick) formatted **FAT32 / MS-DOS (FAT)** with a Mas
    Then eject the card.
 4. With the car on and the PCM fully booted, insert the card. The ModKit runs automatically. Wait until it tells you to remove the media.
 5. Remove the card and restart the PCM (hold the volume/power knob for about 10 seconds until the Porsche logo appears).
-6. Make sure the diamond button is set to *Next* in the PCM settings, connect CarPlay, play something and press it.
+6. Make sure the diamond button is set to *Next Track* in the PCM settings, connect CarPlay, play something and press it.
 
 The card's `Logs` folder will contain a log of the install. A successful one ends with `OK: installed /mnt/app/eso/hmi/lsd/jars/diamondskip.jar`.
 
@@ -120,9 +119,9 @@ DiamondSkip registers the missing handler. When the cluster's skip command arriv
 
 ### The two classes
 
-**`DiamondCarPlaySkip`** is the handler itself. It implements the two cluster-audio listener interfaces Porsche's code expects (more on why it implements two in the [investigation](#how-we-figured-it-out)).
+**`DiamondCarPlaySkip`** is the handler itself. It implements the two cluster-audio listener interfaces Porsche's code expects.
 
-- **Skip:** when the cluster asks for a skip, it works out the direction from the sign of the count (the diamond button set to *Next* always sends forward), clamps the number of steps between one and five, and for each step sends a press followed by a release to the CarPlay player. It then looks up the cluster's CarPlay audio service and reports the result, so the cluster isn't left waiting.
+- **Skip:** when the cluster asks for a skip, it works out the direction from the sign of the count (the diamond button set to *Next Track* always sends forward), clamps the number of steps between one and five, and for each step sends a press followed by a release to the CarPlay player. It then looks up the cluster's CarPlay audio service and reports the result, so the cluster isn't left waiting.
 - **Other requests:** the same interfaces include other requests the cluster might send, such as seeking, changing source or selecting list entries. CarPlay doesn't support those through this path, so the handler gives the cluster a proper answer instead of silence:
   - Seek requests get a "seek stopped" status (sent shortly after the request, so the cluster sees the request acknowledged and then finished).
   - Source-switch requests get a "not possible" result.
@@ -155,71 +154,9 @@ On the test car, 14 out of 14 presses over a drive skipped the track, each takin
 
 ---
 
-## How we figured it out
-
-This took several rounds of reading Porsche's code and capturing logs from the car. Here's the path, including the dead ends, in case it helps anyone doing something similar.
-
-### 1. "Porsche fixed this in 2022"
-
-Forum posts say the diamond button works with CarPlay on 2022+ Macans. Those cars have the newer PCM 6 hardware, so that "fix" isn't something you can install on an older car. It did suggest the problem was software rather than wiring, though: the button clearly reaches the PCM, because it works for every other audio source.
-
-### 2. Getting the code off the car
-
-PCM 5's UI is a Java application. Using the ModKit, a small script copied the UI's main jar and the existing mod jars from the PCM to a USB stick. Decompiling it showed the CarPlay component, the joker key handling, and the cluster audio plumbing.
-
-### 3. The obvious suspect didn't fire
-
-The CarPlay component already contains `TMSkipOverJokerkey`, Porsche's own "joker key skips CarPlay tracks" feature. That looked like the answer – maybe it was just switched off. But that class listens to the *head unit's* joker key service, and on the Macan the diamond button lives on the steering wheel and goes through the cluster. Logging confirmed it: that code never ran when the button was pressed.
-
-### 4. Turning up the logging
-
-To see what *did* happen, a temporary diagnostic mod (DiamondDiag) raised the log level of the relevant components by editing the logging line in `lsd.sh`, after backing it up. It also started a background capture of the QNX system log to a second SD card on each boot. It was built to be undone completely: the uninstall restores the backup and removes the capture.
-
-With that in place, the button was pressed with three sources:
-- Spotify over CarPlay (didn't work)
-- YouTube Music over CarPlay (didn't work)
-- Bluetooth audio (worked)
-
-The logs from the three were then compared.
-
-### 5. Finding the gap
-
-The logs and the code together showed the real path:
-1. The cluster sends a BAP "dedicated audio control" skip.
-2. The PCM's BAP audio handler asks: *which listener handles the currently active source?*
-3. For Bluetooth it finds the media listener.
-4. For CarPlay ("smartphone integration") it asks the cluster audio module for its CarPlay listener – which is always empty.
-5. It logs `no active audio service listener` and tells the cluster the command failed.
-
-Porsche wrote the plumbing for a CarPlay listener, but on this firmware nothing ever registers one.
-
-### 6. The first fix was wrong (and testing caught it)
-
-The first version registered the new handler under the CarPlay listener's interface name. Before it ever went near the car, a separate review of the code found the problem. The component that fills those listener slots (`ServiceManagerAudio`) only watches for seven specific service names – tuner, media, online media, TV and tone listeners, plus two others – and **the CarPlay listener isn't one of them.** Registering under that name would have been silently ignored.
-
-The way through came from how that component sorts what it finds. When a matching service appears, it checks what *kind* of object it is, and it checks for the CarPlay listener type before the tone listener type. So the handler implements **both** interfaces and is registered under the **tone listener** name, which the component does watch. When it's picked up, the CarPlay check matches first and it goes into the CarPlay slot. The real tone listener's slot is never touched.
-
-Rather than trust that reading of the code, Porsche's actual `ServiceManagerAudio` class was run on a desktop Java VM with mock services, using the code dumped from this car. Adding the handler put it in the CarPlay slot and left the tone slot alone. Removing it cleared only the CarPlay slot.
-
-### 7. Answering the cluster properly
-
-The cluster expects a reply to its requests. A handler that silently ignores them could leave the cluster waiting or in an odd state. So every request the interfaces define gets either the real action (skip), a proper "can't do that" or status reply (seek, source switch), or an echo (source state, list preference). A desktop test harness checked that each request produces the expected calls back to the cluster service.
-
-### 8. Building for a 2010s Java VM
-
-The PCM runs IBM's J9 VM, which expects old Java 1.4-format class files. The code is compiled with a modern JDK targeting Java 8, against the jar from the car, and then run through a small script (`tools/downgrade.py`). The script rewrites the class files to the older version and strips the metadata the old VM doesn't understand. It refuses to process anything that uses features the old format can't represent.
-
-The source sticks to what Java 1.4 can do: no generics, no autoboxing, no `StringBuilder` and no `+` string joining (`StringBuffer` instead), and classes are looked up by name rather than with `.class` literals.
-
-### 9. The car test
-
-Installed on the car, the handler registered at boot, and every press of the diamond button skipped the Spotify track and reported success to the cluster. The diagnostic logging was then removed, leaving only the one jar.
-
----
-
 ## Limitations
 
-- **Forward only, in practice.** The diamond button set to *Next* only sends "skip forward". The handler supports backward if something sends it, but the button can't.
+- **Forward only, in practice.** The diamond button set to *Next Track* only sends "skip forward". The handler supports backward if something sends it, but the button can't.
 - **No press-and-hold seek.** If the cluster asks to seek, the mod tells it seeking has stopped rather than scrubbing through the track.
 - **One firmware version.** Only `MH2p_US_PO416_P2656` is enabled. Others are blocked by the installer until someone tests them.
 - **Dealer updates.** A PCM software update at the dealer may remove the mod or change the code it relies on. Don't reinstall on new firmware until it has been checked.
