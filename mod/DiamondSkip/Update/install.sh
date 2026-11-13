@@ -3,7 +3,6 @@
 JARS=/mnt/app/eso/hmi/lsd/jars
 LSD=/mnt/app/eso/hmi/lsd/lsd.sh
 TARGET=$JARS/diamondskip.jar
-OPTIN="$MOD_PATH/../allow_untested.txt"
 
 echo "DiamondSkip install: diamond button skips tracks in CarPlay"
 echo "Release: $RELEASE_VERSION"
@@ -13,18 +12,15 @@ if [ "$OEM" != "PO" ]; then
     exit 0
 fi
 
-if [ "$OEM$TYPE" = "PO416" ] && [ "$SOFTWARE_VERSION" = "2656" ]; then
-    echo "Tested software version PO416 P2656."
-elif [[ -f "$OPTIN" ]]; then
-    echo "WARNING: UNTESTED software version $OEM$TYPE P$SOFTWARE_VERSION."
-    echo "WARNING: installing because allow_untested.txt is present. Use at your own risk."
-    echo "WARNING: if CarPlay misbehaves, remove the mod with the uninstall or fail-safe card."
-else
-    echo "REFUSED: DiamondSkip has only been tested on PO416 P2656. Nothing changed."
-    echo "To install anyway at your own risk, add an empty file named allow_untested.txt"
-    echo "to the Mods/DiamondSkip folder on the card and run the install again."
-    exit 0
-fi
+case "$OEM$TYPE P$SOFTWARE_VERSION" in
+    "PO416 P2656"|"PO416 P2648")
+        echo "Tested software version $OEM$TYPE P$SOFTWARE_VERSION."
+        ;;
+    *)
+        echo "WARNING: UNTESTED software version $OEM$TYPE P$SOFTWARE_VERSION. Installing at your own risk."
+        echo "WARNING: if CarPlay misbehaves, remove the mod with the uninstall or fail-safe card."
+        ;;
+esac
 
 if [[ ! -f "$MOD_PATH/diamondskip.jar" ]]; then
     echo "REFUSED: diamondskip.jar is missing from the drive. Nothing changed."
