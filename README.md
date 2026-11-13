@@ -6,6 +6,7 @@ DiamondSkip is a small software mod, installed from an SD card with [LawPaul's M
 
 - **No hardware, no coding of control units, no PIWIS.** It adds one small file to the PCM and changes nothing else.
 - **Fully reversible.** Uninstalling deletes that one file. A fail-safe card is provided too.
+- **Free for personal use.** Licensed CC BY-NC-SA 4.0 – no commercial use (see [license](#credits-and-license)).
 - **Plays nicely with other mods.** Tested alongside [LawPaul's full screen CarPlay mod](https://github.com/LawPaul/MH2p_CarPlay_FullScreen) and [fifthBro's cluster navigation mod](https://github.com/fifthBro/mh2p-cluster).
 
 > ⚠️ **Read the [Safety](#safety) and [Compatibility](#compatibility) sections before installing.** This modifies software in your car. It was built and tested on one car. You use it at your own risk.
@@ -272,6 +273,6 @@ The code it hooks into has to be checked against each firmware's `lsd.jar` befor
 - **[fifthBro](https://github.com/fifthBro)** for [mh2p-cluster](https://github.com/fifthBro/mh2p-cluster), whose work on the CarPlay internals was a useful reference.
 - Everyone on Rennlist, Macanforum and r/Macan who documented the problem.
 
-DiamondSkip's own code (everything in this repo except the bundled ModKit in the release zips) is released under the [MIT license](LICENSE). Porsche, Macan and PCM are trademarks of Dr. Ing. h.c. F. Porsche AG. This project is not affiliated with or endorsed by Porsche, Audi or Volkswagen Group.
+DiamondSkip is Copyright © 2026 hershey-18 and is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0)](LICENSE) – the same license as the ModKit. You're free to use, share and modify it for **non-commercial** purposes, as long as you credit this project and release any modified version under the same license. **Selling it, charging to install it, or bundling it into a paid product is not allowed** without permission. If you're interested in commercial use, open an issue to get in touch. Porsche, Macan and PCM are trademarks of Dr. Ing. h.c. F. Porsche AG. This project is not affiliated with or endorsed by Porsche, Audi or Volkswagen Group.
 
 **No warranty.** This software is provided as is. You are responsible for anything you install on your car.
